@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>សំណួរខ្យូតៗ</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Khmer OS Battambang', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffe6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* លាក់ input radio ទាំងអស់ */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* ទម្រង់ប្រអប់សំណួរទូទៅ */
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+            display: none; /* លាក់ជាមុនសិន */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2 {
+            color: #ff4d6d;
+            margin-bottom: 25px;
+            font-size: 22px;
+        }
+
+        /* ស្ទាយប៊ូតុង */
+        .btn-group {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+        }
+
+        .btn {
+            background-color: #ff758f;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .btn:hover {
+            background-color: #ff4d6d;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        /* រូបភាព Emoji */
+        .emoji {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        /* --- លក្ខខណ្ឌបញ្ជាបង្ហាញផ្ទាំងនីមួយៗ --- */
+
+        /* បង្ហាញប្រអប់ទី១ ជាដំបូងគេបង្អស់ */
+        #box1 {
+            display: block;
+        }
+
+        /* បើចុច "ទំនេរ" ឬ "រវល់" ក្នុងប្រអប់ទី១ -> លាក់ប្រអប់ទី១ បង្ហាញប្រអប់ទី២ */
+        #done-step1-free:checked ~ #box1, #done-step1-busy:checked ~ #box1 { display: none; }
+        #done-step1-free:checked ~ #box2, #done-step1-busy:checked ~ #box2 { display: block; }
+
+        /* បើចុច "ញាំហើយ" ឬ "នៅ" ក្នុងប្រអប់ទី២ -> លាក់ប្រអប់ទី២ បង្ហាញប្រអប់ទី៣ */
+        #done-step2-yes:checked ~ #box2, #done-step2-no:checked ~ #box2 { display: none; }
+        #done-step2-yes:checked ~ #box3, #done-step2-no:checked ~ #box3 { display: block; }
+
+        /* បើចុច "មានហើយ" ក្នុងប្រអប់ទី៣ -> លាក់ប្រអប់ទី៣ បង្ហាញប្រអប់អរគុណ */
+        #bf-yes:checked ~ #box3 { display: none; }
+        #bf-yes:checked ~ #box-thanks { display: block; }
+
+        /* បើចុច "នៅ" ក្នុងប្រអប់ទី៣ -> លាក់ប្រអប់ទី៣ បង្ហាញប្រអប់សុំធ្វើសង្សារ */
+        #bf-no:checked ~ #box3 { display: none; }
+        #bf-no:checked ~ #box-ask { display: block; }
+
+        /* បើចុច "ព្រម" ក្នុងប្រអប់សុំធ្វើសង្សារ -> លាក់ប្រអប់សុំធ្វើសង្សារ បង្ហាញរូបបេះដូង */
+        #final-yes:checked ~ #box-ask { display: none; }
+        #final-yes:checked ~ #box-heart { display: block; }
+
+        /* បើចុច "មិនព្រម" ក្នុងប្រអប់សុំធ្វើសង្សារ -> លាក់ប្រអប់សុំធ្វើសង្សារ បង្ហាញរូបសេដ */
+        #final-no:checked ~ #box-ask { display: none; }
+        #final-no:checked ~ #box-sad { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- ប៊ូតុងលាក់សម្រាប់គ្រប់គ្រងដំណើរការ -->
+    <!-- សំណួរទី១ -->
+    <input type="radio" id="done-step1-free" name="step1">
+    <input type="radio" id="done-step1-busy" name="step1">
+    
+    <!-- សំណួរទី២ -->
+    <input type="radio" id="done-step2-yes" name="step2">
+    <input type="radio" id="done-step2-no" name="step2">
+    
+    <!-- សំណួរទី៣ -->
+    <input type="radio" id="bf-yes" name="step3">
+    <input type="radio" id="bf-no" name="step3">
+    
+    <!-- សំណួរទី៤ (សុំស្រលាញ់) -->
+    <input type="radio" id="final-yes" name="step4">
+    <input type="radio" id="final-no" name="step4">
+
+
+    <!-- ផ្ទាំងទី១: កំពុងធ្វើអីហ្នឹង? -->
+    <div class="box" id="box1">
+        <div class="emoji">🤔</div>
+        <h2>កំពុងធ្វើអីហ្នឹង?</h2>
+        <div class="btn-group">
+            <label for="done-step1-free" class="btn">ទំនេរ</label>
+            <label for="done-step1-busy" class="btn">រវល់</label>
+        </div>
+    </div>
+
+    <!-- ផ្ទាំងទី២: ញាំបាយនៅកញ្ញា? -->
+    <div class="box" id="box2">
+        <div class="emoji">🍚</div>
+        <h2>ញាំបាយនៅកញ្ញា?</h2>
+        <div class="btn-group">
+            <label for="done-step2-yes" class="btn">ញាំហើយ</label>
+            <label for="done-step2-no" class="btn">នៅ</label>
+        </div>
+    </div>
+
+    <!-- ផ្ទាំងទី៣: កញ្ញាមានសង្សារនៅ? -->
+    <div class="box" id="box3">
+        <div class="emoji">👀</div>
+        <h2>កញ្ញាមានសង្សារនៅ?</h2>
+        <div class="btn-group">
+            <label for="bf-yes" class="btn">មានហើយ</label>
+            <label for="bf-no" class="btn">នៅទេ</label>
+        </div>
+    </div>
+
+    <!-- ផ្ទាំងទី៤ (ករណីចុច មានហើយ): អរគុណដែលបានឆ្លើយ -->
+    <div class="box" id="box-thanks">
+        <div class="emoji">🙏</div>
+        <h2>អរគុណដែលបានឆ្លើយ! 🥰</h2>
+    </div>
+
+    <!-- ផ្ទាំងទី៥ (ករណីចុច នៅទេ): ញុមសុំធ្វើសង្សារបានអត់? -->
+    <div class="box" id="box-ask">
+        <div class="emoji">👉👈</div>
+        <h2>ញុមសុំធ្វើសង្សារបានអត់?</h2>
+        <div class="btn-group">
+            <label for="final-yes" class="btn">ព្រម</label>
+            <label for="final-no" class="btn">មិនព្រម</label>
+        </div>
+    </div>
+
+    <!-- ផ្ទាំងចុងក្រោយ (ករណីចុច ព្រម): ចេញរូបបេះដូង -->
+    <div class="box" id="box-heart">
+        <div class="emoji" style="color: #ff4d6d; animation: pulse 1s infinite alternate;">💖</div>
+        <h2>យាយមែនឬយាយលេងបើយាយមែនឆាតប្រាបញុមក្នុងឆាតថា OK ផងណា</h2>
+        <style>
+            @keyframes pulse {
+                from { transform: scale(1); }
+                to { transform: scale(1.2); }
+            }
+        </style>
+    </div>
+
+    <!-- ផ្ទាំងចុងក្រោយ (ករណីចុច មិនព្រម): ចេញរូបសេដ -->
+    <div class="box" id="box-sad">
+        <div class="emoji">😢</div>
+        <h2> មិនព្រមមែនទេ... សេដណាស់! 💔</h2>
+    </div>
+
+</body>
+</html>
